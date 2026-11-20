@@ -28,23 +28,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Extract NEXORA ZIP automatically
+      - name: Extract NEXORA ZIP
         run: |
           mkdir -p extracted _site
           unzip -q NEXORA_GitHub_READY.zip -d extracted
-
           INDEX=$(find extracted -type f -name index.html | head -n 1)
-
           if [ -z "$INDEX" ]; then
-            echo "ERROR: index.html not found inside ZIP"
+            echo "index.html not found in ZIP"
             exit 1
           fi
-
-          SITE_DIR=$(dirname "$INDEX")
-          cp -a "$SITE_DIR/." _site/
+          cp -a "$(dirname "$INDEX")/." _site/
 
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
